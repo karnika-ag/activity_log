@@ -12,10 +12,8 @@ class activity_log_model extends CI_Model {
 	  			     	  	->where(array('source_id' => $userid))
 							->get();
 	
-		$data=$query->result();
-	
-			return $data;
-	
+		    $data=$query->result();
+			return $data;	
     }
 
 

@@ -1,17 +1,9 @@
     
 <div class="container">
-    <h2>Recent activity done by <?php echo $_POST['user_id'] ?></h2>
+    <h2>Recent activity done by <?php echo $result[0]->source_id ?></h2>
 
 
-	 	<!--		<table align="center" border="1" style="margin-left: 330px; margin-top: 22px;">
-	 		<thead>	<tr>
-	 			<th>id</th>
-	 			<th style="width: 132px;padding-left:10px;">source_id</th>
-                <th style="width: 132px;padding-left:10px;">target_id</th>
-                <th style="width: 132px;padding-left:10px;">event_id</th>
-                <th style="width: 132px;padding-left:10px;">date_time</th>
-	 			</tr></thead>
-	 	-->
+	 
 	 	        <table class="table table-hover table-condensed table-bordered">
 	 	        <thead>
 	 	        <tr>
