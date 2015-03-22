@@ -44,9 +44,10 @@ class activity_log_model extends CI_Model {
          'event_id' => $event
          );
         $query= $db_register->insert('activity',$data);
+
 	    if($query)
-             return TRUE;
-         else
+            return TRUE;
+          else
             return FALSE;
 		
     }

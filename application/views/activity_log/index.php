@@ -1,3 +1,9 @@
+<div class="notification-container fap-edit-alert hidden-print" style="display: none">
+		<span class='message'>
+     	</span>
+</div>
+
+
 
  <h1>RECENT ACTIVITY DETAILS</h1>
     <br>
@@ -22,9 +28,10 @@
 	        	success: function(data){
 	        		data = JSON.parse(data);
 	        		console.log("success");
-	                  if(data== 0 )
+	                  if( data[0].errorid == 0 )
 						{
 							console.log("error in fetching");
+							showAlert(data[0].message);
 						}
 						else
 						{
@@ -46,6 +53,7 @@
 	            error: function (jqXHR, textStatus, errorThrown)
 				{		
 					console.log("not good");
+					showAlert("Some Error occured! Please reload/refresh the page and try again.");
 					return false;
 				}
 	      });
@@ -62,22 +70,34 @@
 	        		console.log("success");
 	        		if(data==1)
 	        		{
-                        var content="DATA SUCCESFULLY INSERTED";
+                            var content="DATA SUCCESFULLY INSERTED";
                         	$('#div1').html(content);
 	        		}
 	        		else
 	        		{
-	        		var content="DATA NOT INSERTED";
-                        	$('#div1').html(content);	
+	        		        var content="DATA NOT INSERTED";
+	        		        showAlert(data);
+	        		        console.log(data);
+                        	$('#div1').html(content);
+                        	
 	        		}
-	        		//$('#div1').html(data);	
+	        		
 	            },
 	            error: function (jqXHR, textStatus, errorThrown)
 				{		
 					console.log("not good");
+					showAlert("Some Error occured! Please reload/refresh the page and try again.");
 					return false;
 				}
 	      });
 	    });
 	});
+
+function showAlert( message )
+{
+	$('.fap-edit-alert .message').html( message );
+	$('.fap-edit-alert').show();
+}
+
+
   </script>  	

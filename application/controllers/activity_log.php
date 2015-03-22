@@ -6,6 +6,7 @@ class activity_log extends CI_CONTROLLER
   public function __construct() {
         parent::__construct();
         $this->load->model('activity_log_model');
+        $this->lang->load('activity','english');
     }
 
     public function index()
@@ -15,8 +16,13 @@ class activity_log extends CI_CONTROLLER
 
     public function home()
     {
-        $data="";
-        $this->_render_page('activity_log/index', $data);
+       
+         $view_html = array(
+            $this->load->view('activity_log/header'),
+            $this->load->view('activity_log/index'),
+            $this->load->view('activity_log/footer')
+            );
+        return $view_html;
     }
    
    public function insert()
@@ -24,7 +30,21 @@ class activity_log extends CI_CONTROLLER
         $userid=$this->input->post('userid');
         $targetid=$this->input->post('targetid');
         $eventid=$this->input->post('eventid');
-        echo $this->activity_log_model->activity_db_insert($userid,$targetid,$eventid);  
+        if(empty($userid) || empty($targetid) || empty($eventid))
+        {
+            echo $this->lang->line('ErrorInvalidParameter')." Userid or Targetid or Eventid is missing";
+            return;
+        }
+        else
+        {
+        $val=$this->activity_log_model->activity_db_insert($userid,$targetid,$eventid);  
+        if($val==TRUE)    
+          echo TRUE;
+        else
+           echo $this->lang->line('ErrorDataInserting'); 
+         return;
+        }
+        
    }
 
 
@@ -32,22 +52,38 @@ class activity_log extends CI_CONTROLLER
     {
         $userid=$this->input->post('userid');
         $targetid=$this->input->post('targetid');
-        if(!empty($userid))
-            echo $this->activity_log_model->activity_db_fetch($userid,$targetid);
+        if(empty($userid))
+        {
+            
+            $status=array();
+            $status['errorid']=0;
+            $status['message']=$this->lang->line('ErrorInvalidParameter')." Userid is missing";
+            $ans[]=array();
+            $ans[0]=$status;
+            echo json_encode($ans);
+            return;
+        }
         else
-            echo json_encode("0");
+        {
+            $val=$this->activity_log_model->activity_db_fetch($userid,$targetid);
+            if($val==FALSE)
+            {
+                $status[]=array();
+                $status['errorid']=0;
+                $status['message']=$this->lang->line('ErrorDataFetching');
+                 $ans[]=array();
+                 $ans[0]=$status;
+                echo json_encode($ans);
+            }
+            else
+                echo $val;
+
+            return;
+
+        }
+        
     }
 
 
-    function _render_page($view, $data=null, $render=false)
-    {
-            //$this->load->view($view, $data);
-            $view_html = array(
-            $this->load->view('activity_log/header', $data, $render),
-            $this->load->view($view, $data, $render),
-            $this->load->view('activity_log/footer', $data, $render)
-            );
-        if (!$render) return $view_html;
-    }
 
 }
