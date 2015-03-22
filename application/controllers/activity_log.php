@@ -32,14 +32,31 @@ class activity_log extends CI_CONTROLLER
    }
 
 
-    public function fetch($string)
+    public function fetch()
     {
-                $array = explode("%20", $string);
+
+        
+        $userid=$this->input->post('userid');
+        $targetid=$this->input->post('targetid');
+        if(!empty($userid))
+            echo $this->activity_log_model->activity_db_fetch($userid);
+        else
+            echo json_encode("0");
+        
+            /*    $array = explode("%20", $string);
                 $userid=$array[0];
-                $targetid=$array[1];
-                $res= $this->activity_log_model->activity_db_fetch($userid);    
-                $data['result']=$res;
-                $this->_render_page('activity_log/fetchdata', $data);
+                $targetid=$array[1];*/
+              //
+               // $res= $this->activity_log_model->activity_db_fetch($userid);    
+                //$data['result']=$res;
+                //$this->_render_page('activity_log/fetchdata', $data);
+                
+            
+                //$res="okk came here";
+                //echo $res;
+               // $tmp="okkkkk naaaa";
+                //echo $tmp;
+                //return $tmp;
     }
 
 
