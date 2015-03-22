@@ -4,20 +4,34 @@ class activity_log_model extends CI_Model {
 
 	
 
-    public function activity_db_fetch($userid) {
+    public function activity_db_fetch($userid,$targetid) {
 
         $db_register = $this->db;
+
+        if(!empty($targetid))
+        {
         $query= $db_register->select('*')
 							->from('activity')
-	  			     	  	->where(array('source_id' => $userid))
+	  			     	  	->where(array('source_id' => $userid,'target_id' => $targetid))
 							->get();
-	
-		   	
-
-            if($query->num_rows()>0)
+         if($query->num_rows()>0)
                 return json_encode($query->result('array'));
             else
-                return FALSE;
+                return FALSE;                    
+	    }
+        else
+        {
+         $query= $db_register->select('*')
+                            ->from('activity')
+                            ->where(array('source_id' => $userid))
+                            ->get(); 
+          if($query->num_rows()>0)
+                return json_encode($query->result('array'));
+            else
+                return FALSE;                      
+        }
+
+           
     }
 
 
@@ -30,8 +44,10 @@ class activity_log_model extends CI_Model {
          'event_id' => $event
          );
         $query= $db_register->insert('activity',$data);
-	    return $query;
-		
+	    if($query)
+             return TRUE;
+         else
+            return FALSE;
 		
     }
 

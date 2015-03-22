@@ -9,10 +9,7 @@
     <button type="button" class="btn btn-success btn-insert" id="sub2" > <span class="glyphicon glyphicon-refresh"></span> INSERT </button><br><br>
     <div id="div1"></div>		
   <script>
-  function printfun(result)
-  {
-
-  }
+ 
 	$(document).ready(function(){
 	    $("#sub1").click(function(){
 	    	var user_id = $("input#user_id").val();
@@ -28,11 +25,15 @@
 	                  if(data== 0 )
 						{
 							console.log("error in fetching");
-					//		showAlert("Some Error occured in fetching Facultys! Please reload/refresh the page and try again.");
 						}
 						else
 						{
-							var content="<h2>Recent activity done by"+data[0].source_id+"</h2>";
+							var content;
+							if(target_id)
+							content="<h2>Recent activity done by "+data[0].source_id+" on target "+target_id+"</h2>";
+						    else
+						    content="<h2>Recent activity done by "+data[0].source_id+"</h2>";	
+
 							content+='<table class="table table-hover table-condensed table-bordered"><tbody><thead><tr><th>id</th><th>source_id</th><th>target_id</th><th>event_id</th><th>date_time</th></tr></thead>';
 							for(var i = 0; i < data.length; i++)
 							{
@@ -43,9 +44,36 @@
 						}
 	            },
 	            error: function (jqXHR, textStatus, errorThrown)
-				{
-
-				
+				{		
+					console.log("not good");
+					return false;
+				}
+	      });
+	    });
+        $("#sub2").click(function(){
+	    	var user_id = $("input#user_id").val();
+            var target_id = $("input#target_id").val();
+            var event_id= $("input#event_id").val();
+	        $.ajax({
+	        	url: "index.php/activity_log/insert", 
+	        	type: "POST",
+                data: {'userid': user_id, 'targetid': target_id, 'eventid': event_id},
+	        	success: function(data){
+	        		console.log("success");
+	        		if(data==1)
+	        		{
+                        var content="DATA SUCCESFULLY INSERTED";
+                        	$('#div1').html(content);
+	        		}
+	        		else
+	        		{
+	        		var content="DATA NOT INSERTED";
+                        	$('#div1').html(content);	
+	        		}
+	        		//$('#div1').html(data);	
+	            },
+	            error: function (jqXHR, textStatus, errorThrown)
+				{		
 					console.log("not good");
 					return false;
 				}
